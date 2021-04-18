@@ -1,40 +1,84 @@
-function treadmill_packet = set_treadmill_speed(speed_m_s)
+function [speed_commands, treadmill_packet] = set_treadmill_speed(t, speed_m_s, accel_m_s2, both_belts)
 %Sets the speed of the treadmill
 
-%speed_m_s - desired speed, in METERS PER SECOND.
+%Input
 
+% speed_m_s - desired speed, in m/s.
+
+% accel_m_s2 - desired acceleration, in m/s^2
+
+% both_belts - 0 for just right belt, 1 for both
+
+%Outputs
+
+% speed_commands - two element vector as [R_speed, L_speed] in m/s, speeds sent to treadmill
+
+% treadmill_packet - [R_speed_report, L_speed_report, incline_report] vector
+                        %units are [mm/s, mm/s, 0.01 deg]
+
+%Safety margins - send treadmill comm also does this but more safety never hurts
+min_speed = 0; %Do not allow going in reverse
+max_speed = 6; %This is under 5min mile pace! Too fast!
 %Acceleration limit (absolute value, used for acceleration and deceleration)
-accel_m_ss = 0.25; %m/s^2
+accel_limit = 1.0; %m/s^2
 %can adjust as needed BUT BE CAREFUL! Treadmill is very powerful.
 
-lower_limit = 0; %Do not allow going in reverse
-upper_limit = 5.4; %This is 5min mile pace! Too fast!
+%% Check input
 
-if speed_m_s < lower_limit
-    speed_m_s = lower_limit;
+if max([size(speed_m_s), size(accel_m_s2), both_belts]) ~= 1
+    error('Problem setting speed: Please input only scalars, not vectors!');
+end
+
+accel_m_s2 = abs(accel_m_s2);
+
+if speed_m_s < min_speed
+    speed_m_s = min_speed;
     warning('Speed below zero, overriding with speed = 0 m/s');
 end
 
-if speed_m_s > upper_limit
+if speed_m_s > max_speed
     speed_m_s = 0;
     warning('Speed above upper limit, overriding with speed = 0 m/s');
 end
 
-packet_speed = speed_m_s*1000;
-packet_accel = accel_m_ss*1000;
-
-try
-    %communicate_with_treadmill()
-catch exc
-    warning('Caught an exception!')
+if accel_m_s2 > accel_limit
+    accel_m_s2 = accel_limit;
+    warning(['Requested acceleration above upper limit, overriding with acceleration = ', ...
+        num2str(accel_limit), ' m/s^2']);
 end
 
-%SetTreadmillSpeed(packet_speed, packet_accel)
-%Set the speed using the TCP/IP connection...
+%% One belt or both?
 
-fprintf(1, 'Setting treadmill speed to %.3f m/s\n', speed_m_s)
+if both_belts
+    R_speed = speed_m_s;
+    L_speed = speed_m_s;
+else
+    R_speed = speed_m_s;
+    L_speed = 0;
+end
+
+speed_commands = [R_speed, L_speed];
+
+%% Get payload and send/receive
+
+% Ordering to payload is: get_payload(speed_R, speed_L, accel_R, accel_L, incline)
+payload = get_payload(R_speed, L_speed, accel_m_s2, accel_m_s2, 0);
+
+%Inside try-catch in case errors happen
+try
+    [R_speed_report, L_speed_report, incline_report] = send_treadmill_command(payload,t);
+catch exc
+    warning('Caught an exception when sending command!');
+    disp(exc); %?? not sure if useful
+    
+    R_speed_report = NaN;
+    L_speed_report = NaN;
+    incline_report = NaN;
+end
+
+%fprintf(1, 'Setting treadmill speed to %.3f m/s\n', speed_m_s)
 
 %Empty for now
-treadmill_packet = [1,2,3]';
+treadmill_packet = [R_speed_report, L_speed_report, incline_report];
 
 end

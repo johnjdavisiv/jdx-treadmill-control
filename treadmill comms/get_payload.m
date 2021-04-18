@@ -26,7 +26,7 @@ function payload = get_payload(speed_R, speed_L, accel_R, accel_L, incline)
 % "Throttle limits" - do NOT change these unless you know what you are doing!
 min_accel = 0.2; % m/s^2
 max_accel = 1; %m/s^2
-max_speed = 5.5; %m/s - this is circa 5min mile pace
+max_speed = 6.0; %m/s - this is under 5min mile pace
 min_speed = 0; %mm/s - zero for no going in reverse (can change to -5.5 if desired)
 max_incline = 0; %degrees - ECU treadmill has no incline module
 
