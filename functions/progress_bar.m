@@ -3,12 +3,11 @@ function progress_bar(prog)
 % prog: percent progress, float between 0 and 1
 bar_width = 32;
 
-
 %Programmatically generate progress bar
 complete_bars = round(prog/100*bar_width);
 incomplete_bars = bar_width - complete_bars;
 
-%If we overmax
+%If we overmax, threshold
 if complete_bars > bar_width
     complete_bars = bar_width;
     incomplete_bars = 0;

@@ -28,8 +28,12 @@ accel_m_s2 = 0.25; %m/s^2
 %Log experiment start time
 exp_start_time = datetime('now', 'TimeZone', 'local');
 
-%Filename for treadmill speed log csv
-log_fname = create_treadmill_log(sub_code, exp_start_time);
+%Filename for treadmill speed log csv - may need aboslute path! For robustness
+try
+    log_fname = create_treadmill_log(sub_code, exp_start_time);
+catch
+    error('Problem with creating treadmill log - try changing directories?');
+end
 
 %Start timer
 t_tic = tic;
@@ -38,9 +42,23 @@ t_tic = tic;
 halt_exp = 0;
 last_loop_trial = 1;
 
+%First progress bar outside?
+fprintf(1,'\n');
+fprintf(1, '------------- Starting instructions -------------\n');
+fprintf(1,'Subject should be on treadmill and audio should be playing\n');
+fprintf(1,'\n');
+fprintf(1,'Instructions duration: %.1f min\n', trial_end(1));
+fprintf(1,'\n');
+progress_bar_first_line();
+
 while ~halt_exp    
     %Toc always returns float seconds
-    elapsed_time = toc(t_tic); %IMPORTANT --- do *60 to convert to minutes for actual trial
+    % --------------------------------------------------------
+    % --- IMPORTANT --- this is where you switch from test mode (in seconds) to real trials!
+    % Divide the toc output by 60 to get minutes!
+    elapsed_time = toc(t_tic)/60; 
+    % --------------------------------------------------------
+    
     timestamp = posixtime(datetime('now', 'TimeZone', 'local'));
         
     %What trial are we on?
@@ -53,11 +71,33 @@ while ~halt_exp
     
     %Trial progress (as a float from 0 to 1)
     trial_progress = trial_elapsed_time/(trial_end(current_trial) - trial_start(current_trial));
-
+    progress_bar(trial_progress*100);
+    
+    %For speed display
+    current_speed_mph = current_speed_m_s*2.237;
+    
+    if current_speed_mph > 0
+        this_min_mi_dec = 1/(current_speed_mph/60);   
+        pace_min = floor(this_min_mi_dec);
+        pace_sec = floor(60*(this_min_mi_dec - pace_min));
+    else
+        %Really just for walk
+        pace_min = 0;
+        pace_sec = 0;
+    end
+    
     if current_trial > last_loop_trial
+        progress_bar(100);
         last_loop_trial = current_trial; 
-        fprintf(1, '---------- Trial %i completed! ----------\n', current_trial-1);
-        fprintf(1, 'Updating speed to %.2f m/s\n', current_speed_m_s);
+        
+        fprintf(1,'\n');
+        fprintf(1, '------------- Starting trial %i -------------\n', current_trial);
+        fprintf(1,'\n');
+        fprintf(1,'Trial duration: %.1f min\n', trial_end(current_trial) - trial_start(current_trial));
+        fprintf(1, 'Updating speed to %.2f m/s  |  %.1f mph  |  %i:%02i/mi\n', ...
+            current_speed_m_s, current_speed_mph, pace_min, pace_sec);
+        %Next progress bar
+        progress_bar_first_line();
     end
     
     %Also need to know if walking or running, because belts!
@@ -77,7 +117,7 @@ while ~halt_exp
     end
     
     %Pause/delay until next loop
-    pause(0.25);
+    pause(0.5);
     %At least on local tcpip echo server, you get <0.01sec updates if no pause
     
 end

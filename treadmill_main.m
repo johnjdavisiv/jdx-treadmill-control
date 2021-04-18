@@ -13,17 +13,17 @@ addpath('./functions', './treadmill comms');
 %Get the speeds for each trial of experiment
 [trial_speeds_m_s, trial_start, trial_end, walk_ind] = get_trial_speeds_from_pace(pref_run_pace);
 
-%Print exeriment details to console
-print_experiment_info(sub_code, pref_run_pace);
-
 %Check the TCP/IP connection with treadmill
 test_treadmill_comm();
 
-%Open connection
-t = open_treadmill_comm();
+%Print exeriment details to console
+print_experiment_info(sub_code, pref_run_pace);
 
 %Confirm experiment start
 confirm_start_experiment();
+
+%Open connection
+t = open_treadmill_comm();
 
 %While-loop to go through trials
 run_experiment(sub_code, t, trial_speeds_m_s, trial_start, trial_end, walk_ind);

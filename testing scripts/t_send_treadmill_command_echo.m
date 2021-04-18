@@ -1,4 +1,4 @@
-function [R_speed, L_speed, incline] = send_treadmill_command(payload,t)
+function [R_speed, L_speed, incline] = t_send_treadmill_command_echo(payload,t)
 
 %Send a TCP command to bertec treadmill
 % JJD 2021-04-17 based on smsong 2019
@@ -25,7 +25,7 @@ fwrite(t,payload,'uint8');
 %incline = fread(t,1,'int16');
 %padding = fread(t,21,'uint8');
 
-
+%This...actually works! in that it reads back the "echo" correctly
 echo_format = fread(t,1,'uint8');
 echo_belt_speeds = fread(t,4, 'int16');
 echo_belt_accels = fread(t,4, 'int16');
@@ -34,8 +34,6 @@ echo_belt_speeds_c = fread(t,4, 'int16');
 echo_belt_accels_c = fread(t,4, 'int16');
 echo_incline_c = fread(t,1,'int16');
 echo_padding = fread(t, 27, 'uint8');
-
-
 
 %Note - OG code has some while-loop antics to read older messages, unsure if needed
 

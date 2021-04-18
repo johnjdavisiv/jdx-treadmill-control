@@ -9,7 +9,10 @@ function t = t_open_treadmill_comm()
 echotcpip('on', 4000);
 
 t=tcpip('localhost',4000);
-set(t,'InputBufferSize',32,'OutputBufferSize',64);
+
+%Testing echo
+set(t,'InputBufferSize',64,'OutputBufferSize',64);
+%set(t,'InputBufferSize',32,'OutputBufferSize',64);
 fopen(t);
 
 end

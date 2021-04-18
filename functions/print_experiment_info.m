@@ -15,7 +15,7 @@ fprintf(1, '***************************************************\n');
 fprintf(1, '***************************************************\n');
 fprintf(1, '   JDX Experimental Protocol for subject %s        \n', sub_code);
 fprintf(1, '\n');
-fprintf(1, '         Preferred run pace: %i:%01i/mi\n', pace_min, pace_sec);
+fprintf(1, '         Preferred run pace: %i:%02i/mi\n', pace_min, pace_sec);
 fprintf(1, '***************************************************\n');
 fprintf(1, '***************************************************\n');
 fprintf(1, '                 PROTOCOL SCHEDULE: \n');

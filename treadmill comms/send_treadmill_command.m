@@ -16,7 +16,7 @@ function [R_speed, L_speed, incline] = send_treadmill_command(payload,t)
 %Send command via TCP
 fwrite(t,payload,'uint8');
 
-% Read reply sychronously - should yield latest packet
+% Read reply sychronously - should yield latest packet (?)
 read_format = fread(t,1,'uint8');
 speeds = fread(t,4,'int16'); %4x int16 vector for belt speed in mm/s (?)
 R_speed = speeds(1);
@@ -26,6 +26,7 @@ incline = fread(t,1,'int16');
 padding = fread(t,21,'uint8');
 
 %Note - OG code has some while-loop antics to read older messages, unsure if needed
+% So, if this DOES NOT work at ECU, try the while-loop trick
 
 end
 
