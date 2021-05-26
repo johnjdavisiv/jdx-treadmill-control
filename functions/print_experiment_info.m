@@ -1,4 +1,4 @@
-function print_experiment_info(sub_code, pref_run_pace)
+function print_experiment_info(sub_code, pref_run_pace, protocol_color)
 %Display a summary of the experimental info to the console
 
 %Could also midfy with "color" so I knwo waht the percents are
@@ -9,7 +9,7 @@ pace_sec = floor(60*(pref_run_pace - pace_min)); %Floor avoids edge case of e.g 
 %Display a text summary of the experiment speeds and duration
 
 %Get the speeds for each trial of experiment
-[trial_speeds_m_s, trial_start, trial_end, ~] = get_trial_speeds_from_pace(pref_run_pace);
+[trial_speeds_m_s, trial_start, trial_end, ~] = get_trial_speeds_from_pace(pref_run_pace, protocol_color);
 
 fprintf(1, '***************************************************\n');
 fprintf(1, '***************************************************\n');
@@ -40,7 +40,7 @@ for a=1:length(trial_start)
     %fprintf('% 5d\n', 12) %
     %prints 12 in 5 characters, padding the un-used 3 leading characters with spaces.
     
-    fprintf(1, '   % 4i  |  % 4.0f    | % 5.2f   |  % 5.1f   |  % 4i:%02i  \n', ...
+    fprintf(1, '   % 4i  |  % 4.1f    | % 5.2f   |  % 5.1f   |  % 4i:%02i  \n', ...
         a, trial_end(a) - trial_start(a), trial_speeds_m_s(a), ...
         this_mph, this_min, this_sec)
 

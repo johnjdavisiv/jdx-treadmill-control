@@ -1,4 +1,4 @@
-function run_experiment(sub_code, t, trial_speeds_m_s, trial_start, trial_end, walk_ind)
+function run_experiment(sub_code, protocol_color, t, trial_speeds_m_s, trial_start, trial_end, walk_ind)
 %Run treadmill protocol given speeds in m/s and trial start/end times
 
 
@@ -30,7 +30,7 @@ exp_start_time = datetime('now', 'TimeZone', 'local');
 
 %Filename for treadmill speed log csv - may need aboslute path! For robustness
 try
-    log_fname = create_treadmill_log(sub_code, exp_start_time);
+    log_fname = create_treadmill_log(sub_code, protocol_color, exp_start_time);
 catch
     error('Problem with creating treadmill log - try changing directories?');
 end

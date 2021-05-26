@@ -1,4 +1,4 @@
-function log_fname = create_treadmill_log(sub_code, exp_start_time)
+function log_fname = create_treadmill_log(sub_code, protocol_color, exp_start_time)
 
 %Create a log file as csv for this treadmill session, return file name and path
 
@@ -11,8 +11,8 @@ start_time_str = datestr(exp_start_time, 'HH_MM_SS');
 %log_fname = [save_path, 'foobar.csv'];
 
 %Original
-log_fname = [save_path,'JDX_treadmill_log_subject_', sub_code, '_protocol_XXX_', ...
-    'date_', iso_date, '_time_', start_time_str, '.csv'];
+log_fname = [save_path,'JDX_treadmill_log_subject_', sub_code, '_protocol_', protocol_color, ...
+    '_date_', iso_date, '_time_', start_time_str, '.csv'];
 
 %Create the log file
 fid = fopen(log_fname, 'w');

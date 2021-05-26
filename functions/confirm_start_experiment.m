@@ -2,7 +2,7 @@ function confirm_start_experiment()
 
 response = '';
 
-while ~matches(upper(response), 'Y')
+while ~strcmpi(response, 'Y')
     fprintf(1, '***************************************************\n');
     fprintf(1, '\n');
     fprintf(1, '        PAUSE POINT! Go through checklist\n')

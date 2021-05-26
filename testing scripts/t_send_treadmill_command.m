@@ -1,7 +1,9 @@
-function [R_speed, L_speed, incline] = send_treadmill_command(payload,t)
+function [R_speed, L_speed, incline] = t_send_treadmill_command(payload,t)
 
 %Send a TCP command to bertec treadmill
 % JJD 2021-04-17 based on smsong 2019
+
+%This test script just uses an echo server to send/receive the same packet
 
 %Inputs
 
@@ -35,7 +37,9 @@ echo_belt_accels_c = fread(t,4, 'int16');
 echo_incline_c = fread(t,1,'int16');
 echo_padding = fread(t, 27, 'uint8');
 
-
+R_speed = echo_belt_speeds(1);
+L_speed = echo_belt_speeds(2);
+incline = echo_incline;
 
 %Note - OG code has some while-loop antics to read older messages, unsure if needed
 
