@@ -16,8 +16,11 @@ function [trial_speeds_m_s, trial_start_times, trial_end_times, walk_ind] = get_
 pref_run_speed_m_s = 1/(pref_run_pace_min_mi*60/1609.344);
 
 % --- Instructions - standing on treadmill ---
+%Note: this program does not start at the same time as the audio! 
+%The "instructions" portion of this script is SHORTER. at audio 2:30, we start this program.
+%So for 5min of instructions, this program only runs for 2.5 minutes.
 intro_speed = 0; %m/s
-intro_dur = 5; %minutes
+intro_dur = 2.5; %minutes
 
 % --- Walk warmup ---
 walk1 = 1.12; %m/s, about 2.5 mph
