@@ -1,5 +1,5 @@
 % Treadmil control main
-% JJD
+% JJD  
 % 2021-05-21
 
 addpath('./functions', './treadmill comms');
@@ -12,6 +12,9 @@ addpath('./functions', './treadmill comms');
 
 %Get the speeds for each trial of experiment
 [trial_speeds_m_s, trial_start, trial_end, walk_ind] = get_trial_speeds_from_pace(pref_run_pace, protocol_color);
+
+%Save planned speeds
+write_protocol_plan(trial_array, sub_code);
 
 %Check the TCP/IP connection with treadmill
 test_treadmill_comm();
