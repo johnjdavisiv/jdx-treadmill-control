@@ -7,7 +7,7 @@ function update_treadmill_log(log_fname, timestamp, elapsed_time, ...
 %One possibility if file writing is too slow is to store these in a matrix that is preallocated
 %Then dump matrix to csv at end of the session
 
-%Create the log file
+
 fid = fopen(log_fname, 'a'); %a for append
 
 %Write the line of data - packets report R first then L
