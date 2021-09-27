@@ -28,6 +28,10 @@ confirm_start_experiment();
 %Open connection
 t = open_treadmill_comm();
 
+%Write protocol plan
+trial_array = [trial_speeds_m_s, trial_start, trial_end, walk_ind];
+write_protocol_plan(trial_array, sub_code, protocol_color)
+
 %While-loop to go through trials
 run_experiment(sub_code, protocol_color, t, trial_speeds_m_s, trial_start, trial_end, walk_ind);
 

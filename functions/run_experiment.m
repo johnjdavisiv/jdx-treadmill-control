@@ -3,7 +3,7 @@ function run_experiment(sub_code, protocol_color, t, trial_speeds_m_s, trial_sta
 
 
 %Treadmill acceleration - DO NOT CHANGE unless you know what you are doing!
-accel_m_s2 = 0.25; %m/s^2
+accel_m_s2 = 0.2; %m/s^2
 
 
 %Inputs

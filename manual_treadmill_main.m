@@ -14,9 +14,9 @@
 % Or use the while loop fix in whoevers' code
 
 %On Icarus only
-cd("C:\Users\johnj\Google Drive\IU Grad school\Dissertation\Code\JDX MATLAB\Treadmill control")
+%cd("C:\Users\johnj\Google Drive\IU Grad school\Dissertation\Code\JDX MATLAB\Treadmill control")
 
-warning('THIS IS A NONFUNCTIONAL TEST SCRIPT!');
+warning('THIS IS FOR MANUAL CONTROL ONLY!');
 
 addpath('./functions', './treadmill comms', './testing scripts');
 
@@ -30,7 +30,7 @@ addpath('./functions', './treadmill comms', './testing scripts');
 [trial_speeds_m_s, trial_start, trial_end, walk_ind] = get_trial_speeds_from_pace(pref_run_pace, protocol_color);
 
 %Check the TCP/IP connection with treadmill
-t_test_treadmill_comm();
+%t_test_treadmill_comm(); 
 
 %Print exeriment details to console
 print_experiment_info(sub_code, pref_run_pace, protocol_color);
@@ -41,6 +41,11 @@ confirm_start_experiment();
 
 %Open connection
 t = t_open_treadmill_comm();
+
+
+%Write protocol plan
+trial_array = [trial_speeds_m_s, trial_start, trial_end, walk_ind];
+write_protocol_plan(trial_array, sub_code, protocol_color)
 
 
 %% While-loop to go through trials
