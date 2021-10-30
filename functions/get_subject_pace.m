@@ -15,14 +15,31 @@ sub_code = input('Subject code: ', 's');
 pace_valid = 0;
 
 while ~pace_valid
-    fprintf('Enter preferred run pace in minutes per mile. \nExample: 8.5 for 8:30/mi pace\n');
+    fprintf('Enter preferred run pace in minutes per mile. \nExample: 8:30 for 8:30/mi pace\n');
     fprintf('--------------------------------------------------------\n');
-    pref_run_pace = str2double(input('Preferred run pace: ', 's'));
+    pref_run_pace_str = input('Preferred run pace: ', 's');
+    colon_seek = strfind(pref_run_pace_str, ':');
+    
+    %Screen for valid format
+    if length(colon_seek) ~= 1
+        fprintf('\n--------------------------------------------------------\n');
+        fprintf('   ***   Entry not valid, please re-enter!   ***\n');
+        fprintf('--------------------------------------------------------\n');
+        continue;
+    end
+
+    min_mi = str2double(pref_run_pace_str(1:colon_seek-1));
+    sec_mi = str2double(pref_run_pace_str(colon_seek+1:end));
+
+    pref_run_pace = min_mi + sec_mi/60;
 
     %Check for valid numbers
     if isa(pref_run_pace, 'float') && ...
+            min_mi >= 4 && ...
+            min_mi < 16 && ...
+            sec_mi < 60 && ...
+            sec_mi >= 0 && ...
             ~isnan(pref_run_pace) && ...
-            max(size(pref_run_pace)) == 1 && ...
             pref_run_pace > 5 && ...
             pref_run_pace < 16
         pace_valid = 1;
